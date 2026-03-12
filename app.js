@@ -89,6 +89,14 @@ function renderTaskNode(task) {
   const badge    = clone.querySelector('.task-priority');
   const delBtn   = clone.querySelector('.task-delete');
 
+  // Botón editar (visible siempre, útil en móvil)
+  const editBtn = document.createElement('button');
+  editBtn.type = 'button';
+  editBtn.className = 'task-edit';
+  editBtn.textContent = '✎';
+  editBtn.setAttribute('aria-label', `Editar "${task.title}"`);
+  delBtn.before(editBtn);
+
   li.dataset.id = task.id;
   if (task.completed) li.classList.add('completed');
 
@@ -104,6 +112,7 @@ function renderTaskNode(task) {
 
   checkbox.addEventListener('change', () => toggleTask(task.id));
   delBtn.addEventListener('click',    () => deleteTask(task.id));
+  editBtn.addEventListener('click',   () => startEdit(task.id, text));
   text.addEventListener('dblclick',   () => startEdit(task.id, text));
 
   return clone;
