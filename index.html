@@ -4,85 +4,126 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TaskFlow – Gestión de tareas</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <!-- ① CABECERA -->
   <header>
-    <h1>TaskFlow</h1>
+    <h1>Task<span>Flow</span></h1>
     <p>Organiza tu día, una tarea a la vez.</p>
   </header>
 
-  <main>
+  <!-- WRAPPER FLEXBOX -->
+  <div class="app-wrapper">
 
-    <!-- ② FORMULARIO: añadir tarea -->
-    <section aria-labelledby="form-title">
-      <h2 id="form-title">Nueva tarea</h2>
+    <main>
 
-      <form id="task-form">
+      <!-- ② FORMULARIO: añadir tarea -->
+      <section class="form-section" aria-labelledby="form-title">
+        <h2 id="form-title">Nueva tarea</h2>
 
-        <label for="task-input">Descripción de la tarea</label>
+        <form id="task-form">
+
+          <div class="field-input">
+            <label for="task-input">Descripción de la tarea</label>
+            <input
+              type="text"
+              id="task-input"
+              name="task"
+              placeholder="Escribe una tarea..."
+              autocomplete="off"
+              required
+            />
+          </div>
+
+          <div class="field-priority">
+            <label for="task-priority">Prioridad</label>
+            <select id="task-priority" name="priority">
+              <option value="alta">Alta</option>
+              <option value="media" selected>Media</option>
+              <option value="baja">Baja</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn-submit">+ Añadir</button>
+
+        </form>
+      </section>
+
+      <!-- ③ LISTA DE TAREAS -->
+      <section class="list-section" aria-labelledby="list-title">
+
+        <div class="list-header">
+          <h2 id="list-title">Lista de tareas</h2>
+          <div class="filters" role="group" aria-label="Filtrar tareas">
+            <button class="filter-btn active" data-filter="all">Todas</button>
+            <button class="filter-btn" data-filter="pending">Pendientes</button>
+            <button class="filter-btn" data-filter="completed">Completadas</button>
+          </div>
+        </div>
+
+        <label for="search-input" class="sr-only">Buscar tareas</label>
         <input
-          type="text"
-          id="task-input"
-          name="task"
-          placeholder="Escribe una tarea..."
-          autocomplete="off"
-          required
+          type="search"
+          id="search-input"
+          placeholder="Buscar tarea..."
+          aria-label="Buscar tareas"
         />
 
-        <label for="task-priority">Prioridad</label>
-        <select id="task-priority" name="priority">
-          <option value="alta">Alta</option>
-          <option value="media" selected>Media</option>
-          <option value="baja">Baja</option>
-        </select>
+        <ul id="task-list" aria-live="polite" aria-label="Lista de tareas">
+        </ul>
 
-        <button type="submit">Añadir tarea</button>
+      </section>
 
-      </form>
-    </section>
+    </main>
 
-    <!-- ③ LISTA DE TAREAS -->
-    <section aria-labelledby="list-title">
-      <h2 id="list-title">Lista de tareas</h2>
+    <!-- ④ PANEL LATERAL DE ESTADÍSTICAS -->
+    <aside aria-labelledby="stats-title">
+      <h2 id="stats-title">Estadísticas</h2>
 
-      <ul id="task-list" aria-live="polite" aria-label="Tareas">
-        <!-- Las tareas se insertan aquí dinámicamente con JS -->
-      </ul>
+      <dl>
+        <div class="stat-card">
+          <dt>Total de tareas</dt>
+          <dd id="stat-total">0</dd>
+        </div>
 
-    </section>
+        <div class="stat-card">
+          <dt>Completadas</dt>
+          <dd id="stat-completed" class="accent">0</dd>
+          <div class="progress-wrap">
+            <div class="progress-label" id="stat-percent">0% completado</div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
 
-  </main>
+        <div class="stat-card">
+          <dt>Pendientes</dt>
+          <dd id="stat-pending">0</dd>
+        </div>
+      </dl>
 
-  <!-- ④ PANEL LATERAL DE ESTADÍSTICAS -->
-  <aside aria-labelledby="stats-title">
-    <h2 id="stats-title">Estadísticas</h2>
+      <div class="bulk-actions">
+        <button class="btn-bulk" id="btn-complete-all">✓ Completar todas</button>
+        <button class="btn-bulk" id="btn-clear-completed">✕ Borrar completadas</button>
+      </div>
 
-    <dl>
-      <dt>Total de tareas</dt>
-      <dd id="stat-total">0</dd>
+    </aside>
 
-      <dt>Completadas</dt>
-      <dd id="stat-completed">0</dd>
-
-      <dt>Pendientes</dt>
-      <dd id="stat-pending">0</dd>
-    </dl>
-  </aside>
+  </div>
 
   <!-- PIE DE PÁGINA -->
   <footer>
     <p>TaskFlow &copy; 2025</p>
   </footer>
 
-  <!-- ⑤ PLANTILLA DE TAREA (no se renderiza, la usa JS) -->
+  <!-- ⑤ PLANTILLA DE TAREA -->
   <template id="task-template">
     <li class="task-item">
-      <label>
-        <input type="checkbox" class="task-checkbox" />
-        <span class="task-text"></span>
-      </label>
+      <input type="checkbox" class="task-checkbox" />
+      <span class="task-text"></span>
       <span class="task-priority"></span>
       <button type="button" class="task-delete" aria-label="Eliminar tarea">✕</button>
     </li>
