@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskFlow – Wireframe</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F5F2EB;
+    --ink: #1A1A1A;
+    --mid: #888;
+    --border: #C8C4BB;
+    --accent: #E8441A;
+    --block: #D9D4C7;
+  }
+
+  body {
+    background: var(--bg);
+    font-family: 'Syne', sans-serif;
+    color: var(--ink);
+    padding: 40px;
+    min-height: 100vh;
+  }
+
+  /* ---------- TITLE BADGE ---------- */
+  .doc-title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 36px;
+  }
+  .doc-title h1 {
+    font-size: 13px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+  .doc-title .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    background: var(--accent);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 2px;
+    letter-spacing: .1em;
+  }
+  .line { flex: 1; height: 1px; background: var(--border); }
+
+  /* ---------- SCREEN FRAME ---------- */
+  .screen {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+
+  /* --- HEADER --- */
+  .hd {
+    background: var(--ink);
+    color: #fff;
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--ink);
+  }
+  .hd-logo { font-size: 22px; font-weight: 800; letter-spacing: -.5px; }
+  .hd-logo span { color: var(--accent); }
+  .hd-nav { display: flex; gap: 8px; }
+  .hd-nav .pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    border: 1px solid rgba(255,255,255,.3);
+    border-radius: 20px;
+    padding: 4px 12px;
+    letter-spacing: .08em;
+    color: rgba(255,255,255,.7);
+  }
+  .hd-nav .pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .hd-stats-summary {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,.5);
+  }
+  .hd-stats-summary strong { color: var(--accent); }
+
+  /* --- BODY GRID --- */
+  .body {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    min-height: 540px;
+  }
+
+  /* --- MAIN: FORM + LIST --- */
+  .main { border-right: 2px solid var(--border); }
+
+  /* Form */
+  .form-area {
+    padding: 24px 28px;
+    border-bottom: 2px solid var(--border);
+    background: #fff;
+  }
+  .form-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 10px;
+  }
+  .form-row { display: flex; gap: 10px; align-items: stretch; }
+  .input-mock {
+    flex: 1;
+    height: 44px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--mid);
+    gap: 8px;
+  }
+  .input-mock .cursor {
+    width: 2px; height: 16px;
+    background: var(--accent);
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  .select-mock {
+    width: 130px;
+    height: 44px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--mid);
+  }
+  .btn-add {
+    height: 44px;
+    padding: 0 20px;
+    background: var(--accent);
+    color: #fff;
+    border: 2px solid var(--accent);
+    border-radius: 4px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+
+  /* Task list */
+  .list-area { padding: 20px 28px; }
+  .list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .list-title {
+    font-size: 12px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--mid);
+  }
+  .filter-tabs { display: flex; gap: 6px; }
+  .ftab {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 3px 10px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--mid);
+    cursor: pointer;
+  }
+  .ftab.on { border-color: var(--ink); color: var(--ink); background: var(--ink); color: #fff; }
+
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    margin-bottom: 8px;
+    background: #fff;
+    transition: border-color .2s;
+  }
+  .task-item.done { background: var(--bg); opacity: .6; }
+  .task-item.done .task-text { text-decoration: line-through; color: var(--mid); }
+  .check-box {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 3px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .check-box.checked { background: var(--accent); border-color: var(--accent); color: #fff; font-size: 11px; }
+  .task-text { flex: 1; font-size: 14px; font-weight: 600; }
+  .task-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+  .badge-high { color: #C0392B; border-color: #C0392B; background: #FDECEA; }
+  .badge-med  { color: #D68910; border-color: #D68910; background: #FEF9E7; }
+  .badge-low  { color: #1E8449; border-color: #1E8449; background: #EAFAF1; }
+  .task-del {
+    width: 24px; height: 24px;
+    border-radius: 3px;
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; color: var(--mid); cursor: pointer;
+  }
+
+  /* --- SIDEBAR: STATS --- */
+  .sidebar { padding: 24px 22px; background: var(--bg); }
+  .sidebar-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 18px;
+  }
+
+  .stat-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .stat-label { font-size: 11px; color: var(--mid); margin-bottom: 4px; }
+  .stat-num { font-size: 32px; font-weight: 800; line-height: 1; }
+  .stat-num.accent { color: var(--accent); }
+
+  .progress-wrap { margin-top: 4px; }
+  .progress-bar-bg {
+    height: 6px; background: var(--block); border-radius: 3px; overflow: hidden; margin-top: 6px;
+  }
+  .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 3px; }
+
+  .donut-mock {
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: conic-gradient(var(--accent) 0% 60%, var(--block) 60% 100%);
+    margin: 14px auto 6px;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .donut-hole {
+    width: 54px; height: 54px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 800;
+  }
+  .donut-legend { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .dl { display: flex; align-items: center; gap: 4px; font-size: 10px; font-family: 'Space Mono', monospace; color: var(--mid); }
+  .dl-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* --- ANNOTATIONS --- */
+  .annotations {
+    max-width: 900px;
+    margin: 28px auto 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .ann {
+    border-left: 3px solid var(--accent);
+    padding: 10px 14px;
+    background: #fff;
+    border-radius: 0 4px 4px 0;
+  }
+  .ann-title { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+  .ann-body { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--mid); line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="doc-title">
+  <h1>TaskFlow — Wireframe v1.0</h1>
+  <div class="line"></div>
+  <div class="tag">DISEÑO UI</div>
+</div>
+
+<!-- SCREEN -->
+<div class="screen">
+
+  <!-- HEADER -->
+  <div class="hd">
+    <div class="hd-logo">Task<span>Flow</span></div>
+    <div class="hd-nav">
+      <div class="pill active">Todas</div>
+      <div class="pill">Pendientes</div>
+      <div class="pill">Completadas</div>
+    </div>
+    <div class="hd-stats-summary">
+      <strong>3</strong> completadas · <strong>5</strong> pendientes
+    </div>
+  </div>
+
+  <!-- BODY -->
+  <div class="body">
+
+    <!-- MAIN -->
+    <div class="main">
+
+      <!-- FORM -->
+      <div class="form-area">
+        <div class="form-label">➕ Nueva tarea</div>
+        <div class="form-row">
+          <div class="input-mock">Escribe una tarea...<div class="cursor"></div></div>
+          <div class="select-mock"><span>Prioridad ▾</span></div>
+          <div class="btn-add">+ Añadir</div>
+        </div>
+      </div>
+
+      <!-- LIST -->
+      <div class="list-area">
+        <div class="list-header">
+          <div class="list-title">Lista de tareas</div>
+          <div class="filter-tabs">
+            <div class="ftab on">Todas</div>
+            <div class="ftab">Activas</div>
+            <div class="ftab">Hechas</div>
+          </div>
+        </div>
+
+        <div class="task-item">
+          <div class="check-box"></div>
+          <div class="task-text">Diseñar mockup de la app</div>
+          <div class="task-badge badge-high">Alta</div>
+          <div class="task-del">✕</div>
+        </div>
+        <div class="task-item">
+          <div class="check-box"></div>
+          <div class="task-text">Configurar entorno de desarrollo</div>
+          <div class="task-badge badge-med">Media</div>
+          <div class="task-del">✕</div>
+        </div>
+        <div class="task-item done">
+          <div class="check-box checked">✓</div>
+          <div class="task-text">Crear repositorio en GitHub</div>
+          <div class="task-badge badge-low">Baja</div>
+          <div class="task-del">✕</div>
+        </div>
+        <div class="task-item done">
+          <div class="check-box checked">✓</div>
+          <div class="task-text">Instalar extensiones de VS Code</div>
+          <div class="task-badge badge-low">Baja</div>
+          <div class="task-del">✕</div>
+        </div>
+        <div class="task-item">
+          <div class="check-box"></div>
+          <div class="task-text">Escribir documentación inicial</div>
+          <div class="task-badge badge-med">Media</div>
+          <div class="task-del">✕</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR STATS -->
+    <div class="sidebar">
+      <div class="sidebar-title">📊 Estadísticas</div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total de tareas</div>
+        <div class="stat-num">8</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Completadas</div>
+        <div class="stat-num accent">3</div>
+        <div class="progress-wrap">
+          <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--mid);">37% completado</div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:37%"></div></div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Por prioridad</div>
+        <div class="donut-mock">
+          <div class="donut-hole">37%</div>
+        </div>
+        <div class="donut-legend">
+          <div class="dl"><div class="dl-dot" style="background:#C0392B"></div>Alta</div>
+          <div class="dl"><div class="dl-dot" style="background:#D68910"></div>Media</div>
+          <div class="dl"><div class="dl-dot" style="background:#1E8449"></div>Baja</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Pendientes</div>
+        <div class="stat-num">5</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ANNOTATIONS -->
+<div class="annotations">
+  <div class="ann">
+    <div class="ann-title">① Cabecera</div>
+    <div class="ann-body">Logo + filtros de vista (Todas / Pendientes / Completadas) + resumen rápido de estado</div>
+  </div>
+  <div class="ann">
+    <div class="ann-title">② Formulario</div>
+    <div class="ann-body">Input de texto + selector de prioridad + botón Añadir. Acción principal de la app</div>
+  </div>
+  <div class="ann">
+    <div class="ann-title">③ Lista de tareas</div>
+    <div class="ann-body">Checkbox marcar completada · badge de prioridad · botón eliminar · tachado visual</div>
+  </div>
+  <div class="ann">
+    <div class="ann-title">④ Panel estadísticas</div>
+    <div class="ann-body">Total · completadas · barra progreso · donut por prioridad · pendientes</div>
+  </div>
+</div>
+
+</body>
+</html>
