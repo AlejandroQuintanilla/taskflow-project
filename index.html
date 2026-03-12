@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TaskFlow – Gestión de tareas</title>
+</head>
+<body>
+
+  <!-- ① CABECERA -->
+  <header>
+    <h1>TaskFlow</h1>
+    <p>Organiza tu día, una tarea a la vez.</p>
+  </header>
+
+  <main>
+
+    <!-- ② FORMULARIO: añadir tarea -->
+    <section aria-labelledby="form-title">
+      <h2 id="form-title">Nueva tarea</h2>
+
+      <form id="task-form">
+
+        <label for="task-input">Descripción de la tarea</label>
+        <input
+          type="text"
+          id="task-input"
+          name="task"
+          placeholder="Escribe una tarea..."
+          autocomplete="off"
+          required
+        />
+
+        <label for="task-priority">Prioridad</label>
+        <select id="task-priority" name="priority">
+          <option value="alta">Alta</option>
+          <option value="media" selected>Media</option>
+          <option value="baja">Baja</option>
+        </select>
+
+        <button type="submit">Añadir tarea</button>
+
+      </form>
+    </section>
+
+    <!-- ③ LISTA DE TAREAS -->
+    <section aria-labelledby="list-title">
+      <h2 id="list-title">Lista de tareas</h2>
+
+      <ul id="task-list" aria-live="polite" aria-label="Tareas">
+        <!-- Las tareas se insertan aquí dinámicamente con JS -->
+      </ul>
+
+    </section>
+
+  </main>
+
+  <!-- ④ PANEL LATERAL DE ESTADÍSTICAS -->
+  <aside aria-labelledby="stats-title">
+    <h2 id="stats-title">Estadísticas</h2>
+
+    <dl>
+      <dt>Total de tareas</dt>
+      <dd id="stat-total">0</dd>
+
+      <dt>Completadas</dt>
+      <dd id="stat-completed">0</dd>
+
+      <dt>Pendientes</dt>
+      <dd id="stat-pending">0</dd>
+    </dl>
+  </aside>
+
+  <!-- PIE DE PÁGINA -->
+  <footer>
+    <p>TaskFlow &copy; 2025</p>
+  </footer>
+
+  <!-- ⑤ PLANTILLA DE TAREA (no se renderiza, la usa JS) -->
+  <template id="task-template">
+    <li class="task-item">
+      <label>
+        <input type="checkbox" class="task-checkbox" />
+        <span class="task-text"></span>
+      </label>
+      <span class="task-priority"></span>
+      <button type="button" class="task-delete" aria-label="Eliminar tarea">✕</button>
+    </li>
+  </template>
+
+  <script src="app.js"></script>
+
+</body>
+</html>
