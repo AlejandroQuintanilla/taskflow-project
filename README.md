@@ -183,3 +183,6 @@ Proyecto desarrollado como parte de las prácticas en **Corner Studio**.
 
 ## 🌐 Demo en vivo
 https://taskflow-project-ten.vercel.app/
+
+## Capturas de pantalla
+
