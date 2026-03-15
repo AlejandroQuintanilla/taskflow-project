@@ -1,189 +1,135 @@
-# TaskFlow
+# TaskFlow 📋
 
-TaskFlow es una aplicación web de gestión de tareas pensada para ser simple, rápida y fácil de usar.
-Desde la interfaz puedes añadir tareas, organizarlas por prioridad, marcarlas como hechas, editarlas o eliminarlas cuando quieras.
+> Organiza tu día, una tarea a la vez.
 
-Este proyecto nace como ejercicio práctico para afianzar conocimientos de **HTML, CSS y JavaScript**, así como el uso de **Git, GitHub y LocalStorage** en un proyecto real.
+![TaskFlow](docs/screenshot.png)
 
----
-
-# Planificación y diseño
-
-Antes de escribir una sola línea de código, se definió la estructura visual de la aplicación mediante un wireframe.
-
-El prototipo fue elaborado en HTML y está disponible en el repositorio en la ruta:
-
-```
-docs/design/wireframe.html
-```
-
-La interfaz quedó dividida en cuatro bloques:
-
-- **Cabecera:** nombre de la app y acceso rápido al modo oscuro
-- **Formulario:** campo de texto y selector de prioridad para añadir tareas
-- **Lista de tareas:** vista principal con filtros y buscador integrado
-- **Panel lateral:** estadísticas actualizadas en tiempo real
+🌐 **Demo en vivo:** https://taskflow-project-ten.vercel.app/
 
 ---
 
-# Qué puede hacer la aplicación
+## Descripción
 
-### Tareas
-
-- Añadir una tarea con título y nivel de prioridad (Alta, Media o Baja)
-- Marcar una tarea como completada
-- Editar el título de cualquier tarea usando el botón ✎ o haciendo doble clic sobre el texto
-- Eliminar tareas de forma individual
-
-### Filtros y búsqueda
-
-- Ver todas las tareas, solo las pendientes o solo las completadas
-- Buscar tareas por palabras clave mientras se escribe
-
-### Operaciones en bloque
-
-- Marcar todas las tareas como completadas de una sola vez
-- Eliminar de golpe todas las tareas que ya están completadas
-
-### Estadísticas
-
-El panel lateral muestra siempre:
-
-- El número total de tareas
-- Las tareas completadas, con barra de progreso y porcentaje
-- Las tareas que quedan pendientes
-
-### Guardado automático
-
-Todo se guarda en **LocalStorage** sin necesidad de hacer nada. Al recargar la página, las tareas siguen ahí exactamente igual que se dejaron.
-
-Más información sobre LocalStorage:
-https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
-
-### Modo oscuro
-
-Se puede cambiar entre tema claro y oscuro desde el botón de la cabecera. La elección se recuerda entre sesiones y también respeta la configuración del sistema operativo del usuario.
-
-### Adaptación a móvil
-
-El diseño se reorganiza automáticamente en pantallas pequeñas: el formulario se apila en columna y el panel de estadísticas pasa a mostrarse debajo de la lista.
+TaskFlow es una aplicación web de gestión de tareas construida con tecnologías web estándar sin dependencias de frameworks. El objetivo principal era practicar HTML semántico, CSS moderno, JavaScript vanilla y las bases del desarrollo frontend profesional, incluyendo control de versiones con Git y despliegue en producción.
 
 ---
 
-# Tecnologías
+## Características
 
-- **HTML5** — estructura semántica con etiquetas como `header`, `main`, `aside` y `footer`
-- **CSS3** — variables, Flexbox y media queries para el responsive
-- **Tailwind CSS** — clases de utilidad cargadas por CDN, con soporte de modo oscuro mediante `dark:`
-- **JavaScript vanilla** — toda la lógica sin frameworks ni librerías externas
-- **LocalStorage** — persistencia de tareas y preferencias del usuario
-- **Git y GitHub** — control de versiones y repositorio remoto
+- ✅ Añadir, editar y eliminar tareas
+- ✅ Prioridad por tarea: Alta, Media o Baja
+- ✅ Filtros: Todas, Pendientes, Completadas
+- ✅ Búsqueda de tareas en tiempo real
+- ✅ Completar todas las tareas de un clic
+- ✅ Borrar todas las completadas
+- ✅ Estadísticas: total, completadas, pendientes y porcentaje
+- ✅ Modo oscuro con detección automática del sistema
+- ✅ Persistencia de datos con LocalStorage
+- ✅ Diseño responsive para móvil, tablet y escritorio
 
 ---
 
-# Estructura de archivos
+## Tecnologías utilizadas
+
+| Tecnología | Uso |
+|------------|-----|
+| HTML5 | Estructura semántica |
+| CSS3 | Estilos propios, variables CSS, Flexbox |
+| Tailwind CSS (CDN) | Clases utilitarias y modo oscuro |
+| JavaScript (ES6+) | Lógica de la aplicación |
+| LocalStorage | Persistencia de datos en el navegador |
+| Git & GitHub | Control de versiones |
+| Vercel | Despliegue en producción |
+
+---
+
+## Estructura del proyecto
 
 ```
 taskflow-project/
-│
-├── index.html          ← estructura HTML semántica
-├── style.css           ← estilos propios + integración con Tailwind
-├── app.js              ← lógica completa de la aplicación
-├── README.md
-├── .gitignore
-│
+├── index.html          # Estructura HTML semántica
+├── style.css           # Estilos propios y variables CSS
+├── app.js              # Lógica JavaScript completa
+├── README.md           # Documentación del proyecto
+├── .gitignore          # Archivos ignorados por Git
 └── docs/
     └── design/
-        └── wireframe.html  ← prototipo visual de la interfaz
+        └── wireframe.html  # Wireframe interactivo inicial
 ```
 
 ---
 
-# Pruebas realizadas
+## Instalación y uso
 
-Se ha comprobado manualmente el funcionamiento de todas las partes de la aplicación.
+No requiere instalación de dependencias. Solo clona el repositorio y abre el archivo en el navegador:
 
-### Añadir tareas
+```bash
+git clone https://github.com/AlejandroQuintanilla/taskflow-project.git
+cd taskflow-project
+```
 
-| Caso | Resultado |
-|---|---|
-| Añadir una tarea con título normal | ✅ Aparece en la lista con el badge de prioridad correcto |
-| Añadir una tarea con un texto muy largo | ✅ El texto se adapta sin romper el diseño |
-| Intentar enviar el formulario vacío | ✅ No se envía, el campo es obligatorio |
+También puedes acceder directamente a la demo: https://taskflow-project-ten.vercel.app/
+
+---
+
+## Funcionalidades detalladas
 
 ### Gestión de tareas
-
-| Caso | Resultado |
-|---|---|
-| Marcar una tarea como completada | ✅ Se tacha visualmente y las estadísticas se actualizan |
-| Editar con el botón ✎ | ✅ Funciona tanto en escritorio como en móvil |
-| Editar haciendo doble clic | ✅ Funciona en escritorio |
-| Pulsar Escape al editar | ✅ Se cancela la edición sin guardar |
-| Eliminar una tarea | ✅ Desaparece y el panel de estadísticas se actualiza |
+Cada tarea tiene: título, prioridad (alta/media/baja) y estado (pendiente/completada). Las tareas se pueden editar haciendo doble clic sobre el texto o pulsando el botón de edición. Todos los cambios se guardan automáticamente en LocalStorage.
 
 ### Filtros y búsqueda
+El panel de filtros permite ver todas las tareas, solo las pendientes o solo las completadas. La barra de búsqueda filtra en tiempo real por el texto de cada tarea.
 
-| Caso | Resultado |
-|---|---|
-| Cambiar entre filtros | ✅ La lista se actualiza correctamente en cada cambio |
-| Escribir en el buscador | ✅ Las tareas se filtran en tiempo real |
-| Combinar filtro y búsqueda | ✅ Ambos funcionan juntos sin conflictos |
+### Estadísticas
+La barra lateral muestra en todo momento el total de tareas, cuántas están completadas, cuántas pendientes y el porcentaje de progreso con una barra visual.
 
-### Operaciones en bloque
-
-| Caso | Resultado |
-|---|---|
-| Completar todas | ✅ Todas las tareas se marcan y las estadísticas reflejan el cambio |
-| Borrar completadas | ✅ Solo se eliminan las tareas ya completadas |
-
-### Persistencia
-
-| Caso | Resultado |
-|---|---|
-| Recargar la página | ✅ Las tareas siguen guardadas en LocalStorage |
-| Recargar con modo oscuro activo | ✅ El tema se mantiene igual que se dejó |
-
-### Responsive
-
-Se probó la aplicación en distintos tamaños de pantalla usando las herramientas de desarrollo del navegador. La interfaz se adapta bien tanto en tablet como en móvil.
+### Modo oscuro
+El botón del encabezado alterna entre modo claro y oscuro. La preferencia se guarda en LocalStorage y al cargar la app se detecta automáticamente la preferencia del sistema operativo del usuario.
 
 ---
 
-# Accesibilidad
+## Accesibilidad
 
-Se han tenido en cuenta las siguientes buenas prácticas:
+La aplicación ha sido auditada con Lighthouse obteniendo una puntuación de **92/100 en Accesibilidad**. Entre las medidas implementadas:
 
-- HTML semántico en toda la estructura de la página
-- Cada `input` tiene su `label` correctamente vinculada
-- Solo existe un `h1`, y los encabezados siguen un orden jerárquico lógico
-- Todos los botones tienen texto visible o un `aria-label` descriptivo
-- La lista de tareas usa `aria-live` para notificar cambios a lectores de pantalla
-- Todos los elementos interactivos son accesibles con el teclado
-- El foco es visible al navegar con Tab
-
-Más información sobre accesibilidad web:
-https://www.w3.org/WAI/fundamentals/accessibility-intro/
+- HTML semántico con `<header>`, `<main>`, `<aside>`, `<footer>`, `<section>`
+- Etiquetas `<label>` asociadas a todos los campos del formulario
+- `aria-label` en botones sin texto descriptivo
+- `aria-live` en la lista de tareas para lectores de pantalla
+- Un único `<h1>` por página y jerarquía de encabezados correcta
+- Navegación completa por teclado
+- Indicadores de foco visibles
 
 ---
 
-# Despliegue
+## Testing
 
-La aplicación se desplegará en **Vercel** conectando directamente el repositorio de GitHub. Cada vez que se suba un cambio a la rama `main`, Vercel redesplegará automáticamente.
-
-Documentación de Vercel:
-https://vercel.com/docs/deployments/git
-
-La URL pública se añadirá aquí una vez completado el despliegue.
+| Caso de prueba | Resultado |
+|----------------|-----------|
+| Añadir tarea con texto y prioridad | ✅ Correcto |
+| Añadir tarea con campo vacío | ✅ Muestra validación |
+| Marcar tarea como completada | ✅ Correcto |
+| Desmarcar tarea completada | ✅ Correcto |
+| Editar tarea con doble clic | ✅ Correcto |
+| Editar tarea con botón ✎ | ✅ Correcto |
+| Eliminar tarea individual | ✅ Correcto |
+| Filtro "Pendientes" | ✅ Correcto |
+| Filtro "Completadas" | ✅ Correcto |
+| Búsqueda en tiempo real | ✅ Correcto |
+| Completar todas | ✅ Correcto |
+| Borrar completadas | ✅ Correcto |
+| Persistencia al recargar | ✅ Correcto |
+| Modo oscuro y guardado | ✅ Correcto |
+| Responsive en móvil | ✅ Correcto |
 
 ---
 
-# Autor
+## Despliegue
 
-Proyecto desarrollado como parte de las prácticas en **Corner Studio**.
+El proyecto está desplegado en **Vercel** con integración continua desde GitHub. Cada push a la rama `main` genera un nuevo despliegue automático.
 
-## 🌐 Demo en vivo
-https://taskflow-project-ten.vercel.app/
+🌐 https://taskflow-project-ten.vercel.app/
 
-## Capturas de pantalla
+---
 
-![TaskFlow](docs/screenshot.png)
+*Proyecto desarrollado durante las prácticas en Corner Studio — 2025*
