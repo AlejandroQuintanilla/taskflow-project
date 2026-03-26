@@ -33,8 +33,18 @@ function saveTasks() {
 }
 
 function loadTasks() {
-  const stored = localStorage.getItem('taskflow-tasks');
-  return stored ? JSON.parse(stored) : [];
+  try {
+    const stored = localStorage.getItem('taskflow-tasks');
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+}
+
+function syncState() {
+  saveTasks();
+  renderTasks();
+  updateStats();
 }
 
 // ── 3. CREAR TAREA ────────────────────────────────────────────
@@ -51,16 +61,16 @@ function createTask(title, priority) {
 
 // ── 4. RENDERIZAR TAREAS ──────────────────────────────────────
 
+const FILTER_FN = {
+  all:       () => true,
+  completed: task => task.completed,
+  pending:   task => !task.completed,
+};
+
 function getFilteredTasks() {
   return tasks.filter(task => {
-    const matchesFilter =
-      currentFilter === 'all' ||
-      (currentFilter === 'completed' && task.completed) ||
-      (currentFilter === 'pending'   && !task.completed);
-
-    const matchesSearch =
-      task.title.toLowerCase().includes(searchQuery.toLowerCase());
-
+    const matchesFilter = FILTER_FN[currentFilter]?.(task) ?? true;
+    const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 }
@@ -121,28 +131,28 @@ function renderTaskNode(task) {
 // ── 5. ACCIONES SOBRE TAREAS ──────────────────────────────────
 
 function addTask(title, priority) {
+  /**
+   * Agrega una nueva tarea con el título y la prioridad especificados.
+   * Si el título está vacío o sólo contiene espacios, no se agrega ninguna tarea.
+   * @param {string} title - El título/descripción de la tarea.
+   * @param {string} priority - La prioridad de la tarea.
+   */
   if (!title.trim()) return;
   const task = createTask(title, priority);
   tasks.push(task);
-  saveTasks();
-  renderTasks();
-  updateStats();
+  syncState();
 }
 
 function toggleTask(id) {
   tasks = tasks.map(t =>
     t.id === id ? { ...t, completed: !t.completed } : t
   );
-  saveTasks();
-  renderTasks();
-  updateStats();
+  syncState();
 }
 
 function deleteTask(id) {
   tasks = tasks.filter(t => t.id !== id);
-  saveTasks();
-  renderTasks();
-  updateStats();
+  syncState();
 }
 
 function startEdit(id, textEl) {
@@ -164,10 +174,10 @@ function startEdit(id, textEl) {
       tasks = tasks.map(t =>
         t.id === id ? { ...t, title: newTitle } : t
       );
-      saveTasks();
+      syncState();
+      return;
     }
     renderTasks();
-    updateStats();
   }
 
   input.addEventListener('blur',    commitEdit);
@@ -181,16 +191,12 @@ function startEdit(id, textEl) {
 
 function completeAll() {
   tasks = tasks.map(t => ({ ...t, completed: true }));
-  saveTasks();
-  renderTasks();
-  updateStats();
+  syncState();
 }
 
 function clearCompleted() {
   tasks = tasks.filter(t => !t.completed);
-  saveTasks();
-  renderTasks();
-  updateStats();
+  syncState();
 }
 
 // ── 7. ESTADÍSTICAS ───────────────────────────────────────────
@@ -212,8 +218,7 @@ function updateStats() {
 
 filterBtns.forEach(btn => {
   btn.addEventListener('click', () => {
-    filterBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+    filterBtns.forEach(b => b.classList.toggle('active', b === btn));
     currentFilter = btn.dataset.filter;
     renderTasks();
   });
@@ -245,9 +250,9 @@ function applyDarkMode(isDark) {
 }
 
 const savedDark = localStorage.getItem('taskflow-dark');
-if (savedDark === '1' || (savedDark === null && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-  applyDarkMode(true);
-}
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+const isDark = savedDark === '1' || (savedDark === null && prefersDark);
+applyDarkMode(isDark);
 
 btnDarkMode.addEventListener('click', () => {
   const isDark = document.documentElement.classList.contains('dark');
