@@ -1,13 +1,17 @@
 /* ============================================================
    TASKFLOW — app.js
-   Lógica completa + LocalStorage + modo oscuro
+   Lógica completa + API REST + modo oscuro
    ============================================================ */
+
+import { obtenerTareas, crearTarea, eliminarTarea } from './src/api/client.js';
 
 // ── 1. ESTADO Y REFERENCIAS AL DOM ───────────────────────────
 
 let tasks = [];
 let currentFilter = 'all';
 let searchQuery = '';
+let isLoading = false;
+let errorMessage = '';
 
 const taskForm        = document.getElementById('task-form');
 const taskInput       = document.getElementById('task-input');
@@ -25,41 +29,63 @@ const statCompleted   = document.getElementById('stat-completed');
 const statPending     = document.getElementById('stat-pending');
 const statPercent     = document.getElementById('stat-percent');
 const progressFill    = document.getElementById('progress-fill');
+const listSection     = document.querySelector('.list-section');
+const statusMessage   = document.createElement('p');
 
-// ── 2. LOCALSTORAGE ───────────────────────────────────────────
+statusMessage.className = 'text-xs font-mono tracking-wide mb-3 hidden';
+listSection.insertBefore(statusMessage, taskList);
 
-function saveTasks() {
-  localStorage.setItem('taskflow-tasks', JSON.stringify(tasks));
-}
+// ── 2. API + ESTADO DE UI ─────────────────────────────────────
 
-function loadTasks() {
-  try {
-    const stored = localStorage.getItem('taskflow-tasks');
-    return stored ? JSON.parse(stored) : [];
-  } catch {
-    return [];
-  }
+const PRIORITY_TO_API = { alta: 1, media: 2, baja: 3 };
+const API_TO_PRIORITY = { 1: 'alta', 2: 'media', 3: 'baja' };
+
+function normalizeTask(apiTask) {
+  return {
+    id: String(apiTask.id ?? apiTask._id ?? crypto.randomUUID()),
+    title: String(apiTask.titulo ?? apiTask.title ?? '').trim(),
+    completed: Boolean(apiTask.completada ?? apiTask.completed ?? false),
+    priority: API_TO_PRIORITY[Number(apiTask.prioridad)] ?? 'media',
+  };
 }
 
 function syncState() {
-  saveTasks();
   renderTasks();
   updateStats();
 }
 
-// ── 3. CREAR TAREA ────────────────────────────────────────────
-
-function createTask(title, priority) {
-  return {
-    id:        crypto.randomUUID(),
-    title:     title.trim(),
-    completed: false,
-    priority:  priority,
-    createdAt: new Date().toISOString(),
-  };
+function setLoading(value, message = 'Cargando tareas...') {
+  isLoading = value;
+  statusMessage.textContent = value ? message : '';
+  statusMessage.className = value
+    ? 'text-xs font-mono tracking-wide mb-3 text-stone-500 dark:text-stone-400'
+    : 'text-xs font-mono tracking-wide mb-3 hidden';
 }
 
-// ── 4. RENDERIZAR TAREAS ──────────────────────────────────────
+function setError(message) {
+  errorMessage = message;
+  statusMessage.textContent = message;
+  statusMessage.className = message
+    ? 'text-xs font-mono tracking-wide mb-3 text-red-600 dark:text-red-400'
+    : 'text-xs font-mono tracking-wide mb-3 hidden';
+}
+
+async function refreshTasks() {
+  setError('');
+  setLoading(true, 'Cargando tareas...');
+  try {
+    const apiTasks = await obtenerTareas();
+    tasks = Array.isArray(apiTasks) ? apiTasks.map(normalizeTask) : [];
+  } catch (error) {
+    tasks = [];
+    setError(error?.message || 'No se pudieron cargar las tareas desde el servidor.');
+  } finally {
+    setLoading(false);
+    syncState();
+  }
+}
+
+// ── 3. RENDERIZAR TAREAS ──────────────────────────────────────
 
 const FILTER_FN = {
   all:       () => true,
@@ -77,6 +103,8 @@ function getFilteredTasks() {
 
 function renderTasks() {
   taskList.innerHTML = '';
+
+  if (isLoading) return;
 
   const filtered = getFilteredTasks();
 
@@ -137,10 +165,20 @@ function addTask(title, priority) {
    * @param {string} title - El título/descripción de la tarea.
    * @param {string} priority - La prioridad de la tarea.
    */
-  if (!title.trim()) return;
-  const task = createTask(title, priority);
-  tasks.push(task);
-  syncState();
+  if (!title.trim()) return Promise.resolve(false);
+  return (async () => {
+    setError('');
+    setLoading(true, 'Guardando tarea...');
+    try {
+      await crearTarea(title.trim(), PRIORITY_TO_API[priority] ?? PRIORITY_TO_API.media);
+      await refreshTasks();
+      return true;
+    } catch (error) {
+      setLoading(false);
+      setError(error?.message || 'No se pudo crear la tarea.');
+      return false;
+    }
+  })();
 }
 
 function toggleTask(id) {
@@ -150,9 +188,16 @@ function toggleTask(id) {
   syncState();
 }
 
-function deleteTask(id) {
-  tasks = tasks.filter(t => t.id !== id);
-  syncState();
+async function deleteTask(id) {
+  setError('');
+  setLoading(true, 'Eliminando tarea...');
+  try {
+    await eliminarTarea(id);
+    await refreshTasks();
+  } catch (error) {
+    setLoading(false);
+    setError(error?.message || 'No se pudo eliminar la tarea.');
+  }
 }
 
 function startEdit(id, textEl) {
@@ -233,9 +278,11 @@ searchInput.addEventListener('input', e => {
 
 taskForm.addEventListener('submit', e => {
   e.preventDefault();
-  addTask(taskInput.value, taskPriority.value);
-  taskForm.reset();
-  taskInput.focus();
+  addTask(taskInput.value, taskPriority.value).then(created => {
+    if (!created) return;
+    taskForm.reset();
+    taskInput.focus();
+  });
 });
 
 btnCompleteAll.addEventListener('click', completeAll);
@@ -262,9 +309,7 @@ btnDarkMode.addEventListener('click', () => {
 // ── 11. INICIALIZACIÓN ────────────────────────────────────────
 
 function init() {
-  tasks = loadTasks();
-  renderTasks();
-  updateStats();
+  refreshTasks();
 }
 
 init();
