@@ -15,17 +15,19 @@
 <body class="bg-stone-100 dark:bg-stone-950 text-stone-900 dark:text-stone-100 min-h-screen transition-colors duration-300">
 
   <!-- ① CABECERA -->
-  <header class="bg-stone-900 dark:bg-black text-white border-b-4 border-red-600 px-8 py-5 flex items-baseline gap-4 sticky top-0 z-50">
-    <h1 class="font-serif text-4xl font-bold tracking-tight leading-none">
-      Task<span class="text-red-500">Flow</span>
-    </h1>
-    <p class="text-sm text-white/40 italic flex-1">Organiza tu día, una tarea a la vez.</p>
+  <header class="bg-stone-900 dark:bg-black text-white border-b-4 border-red-600 px-4 py-4 sm:px-8 sm:py-5 flex items-center justify-between gap-4 sticky top-0 z-50">
+    <div class="flex flex-col gap-1 min-w-0 flex-1">
+      <h1 class="font-serif text-3xl sm:text-4xl font-bold tracking-tight leading-none">
+        Task<span class="text-red-500">Flow</span>
+      </h1>
+      <p class="text-sm text-white/40 italic">Organiza tu día, una tarea a la vez.</p>
+    </div>
 
     <!-- Botón modo oscuro -->
     <button
       id="btn-dark-mode"
       aria-label="Cambiar modo oscuro"
-      class="text-xs font-mono uppercase tracking-widest px-4 py-2 border border-stone-600 rounded text-stone-400 hover:border-white hover:text-white transition-all"
+      class="text-xs font-mono uppercase tracking-widest px-4 py-2 border border-stone-600 rounded text-stone-400 hover:border-white hover:text-white transition-all shrink-0"
     >
       🌙 Oscuro
     </button>
@@ -139,8 +141,8 @@
   </div>
 
   <!-- PIE DE PÁGINA -->
-  <footer class="text-center py-6 text-xs font-mono tracking-wider text-stone-400 dark:text-stone-600 border-t border-stone-200 dark:border-stone-800 mt-8">
-    <p>TaskFlow &copy; 2025</p>
+  <footer class="text-center py-6 text-xs font-mono tracking-wider text-stone-400 dark:text-stone-600 border-t border-stone-200 dark:border-stone-800">
+    <p>TaskFlow Alejandro Quintanilla Cobo &copy; 2026</p>
   </footer>
 
   <!-- ⑤ PLANTILLA DE TAREA -->
