@@ -48,7 +48,7 @@ TaskFlow es una aplicación web de gestión de tareas construida con HTML, CSS y
 
 ---
 
-## Arquitectura del proyecto
+## Estructura del proyecto
 
 ```
 taskflow-project/
@@ -59,6 +59,7 @@ taskflow-project/
 │   └── api/
 │       └── client.js       # Capa de comunicación con la API
 ├── server/                 # Backend completo
+│   ├── README.md           # Documentación del backend
 │   ├── .env                # Variables de entorno (no se sube a GitHub)
 │   ├── package.json
 │   └── src/
@@ -66,16 +67,16 @@ taskflow-project/
 │       ├── config/
 │       │   └── env.js      # Validación de variables de entorno
 │       ├── routes/
-│       │   └── task.routes.js      # Enrutamiento de la API
+│       │   └── task.routes.js
 │       ├── controllers/
-│       │   └── task.controller.js  # Controladores HTTP
+│       │   └── task.controller.js
 │       └── services/
-│           └── task.service.js     # Lógica de negocio
+│           └── task.service.js
 ├── docs/
-│   ├── backend-api.md      # Documentación de herramientas backend
-│   ├── screenshot.png      # Captura de la interfaz
+│   ├── backend-api.md
+│   ├── screenshot.png
 │   ├── design/
-│   │   └── wireframe.html  # Wireframe inicial
+│   │   └── wireframe.html
 │   └── ai/
 │       ├── ai-comparison.md
 │       ├── cursor-workflow.md
@@ -87,90 +88,89 @@ taskflow-project/
 
 ---
 
-## Arquitectura por capas del backend
+## Cómo descargar el proyecto
 
-El backend sigue el patrón de arquitectura por capas con separación estricta de responsabilidades:
+```bash
+git clone https://github.com/AlejandroQuintanilla/taskflow-project.git
+cd taskflow-project
+```
 
-**Capa de enrutamiento** (`routes/`) — Escucha las peticiones HTTP y las dirige al controlador correspondiente. No contiene lógica.
+---
 
-**Capa de controladores** (`controllers/`) — Extrae los datos de la petición, valida el formato y llama al servicio. Formatea la respuesta HTTP con el código de estado correcto.
+## Cómo ejecutar en local
 
-**Capa de servicios** (`services/`) — Contiene la lógica de negocio pura. No conoce la existencia de Express ni de HTTP.
+### Frontend
+
+1. Abre la carpeta `taskflow-project` en VS Code
+2. Instala la extensión **Live Server**
+3. Haz clic en **"Go Live"** abajo a la derecha
+4. Se abrirá automáticamente en `http://127.0.0.1:5500/index.html`
+
+### Backend
+
+```bash
+# Entrar en la carpeta del servidor
+cd server
+
+# Instalar dependencias
+npm install
+
+# Crear el archivo de variables de entorno
+echo "PORT=3000" > .env
+
+# Arrancar el servidor en modo desarrollo
+npm run dev
+```
+
+El servidor estará disponible en `http://localhost:3000/api/v1/tasks`
+
+> El frontend consume la API en `http://localhost:3000`. Asegúrate de que el servidor está corriendo antes de usar la aplicación.
+
+---
+
+## Cómo desplegar en Vercel con Express
+
+### Frontend
+
+1. Ve a [vercel.com](https://vercel.com) e inicia sesión con GitHub
+2. Haz clic en **Add New Project**
+3. Importa el repositorio `taskflow-project`
+4. Deja el directorio raíz en `./`
+5. Haz clic en **Deploy**
+
+### Backend
+
+1. En Vercel crea un nuevo proyecto
+2. Importa el mismo repositorio
+3. Cambia el **Root Directory** a `server`
+4. Añade la variable de entorno `PORT=3000`
+5. Añade un archivo `server/vercel.json`:
+
+```json
+{
+  "version": 2,
+  "builds": [{ "src": "src/index.js", "use": "@vercel/node" }],
+  "routes": [{ "src": "/(.*)", "dest": "src/index.js" }]
+}
+```
+
+6. Haz clic en **Deploy**
+
+Una vez desplegado, actualiza la URL de la API en `src/api/client.js` con la URL pública de Vercel.
 
 ---
 
 ## API REST
 
-Base URL: `http://localhost:3000/api/v1`
+La documentación completa de la API está en [server/README.md](server/README.md).
 
-| Método | Endpoint | Descripción | Código de éxito |
-|--------|----------|-------------|-----------------|
+Base URL local: `http://localhost:3000/api/v1`
+
+| Método | Endpoint | Descripción | Código |
+|--------|----------|-------------|--------|
 | GET | /tasks | Obtener todas las tareas | 200 |
 | POST | /tasks | Crear una nueva tarea | 201 |
 | DELETE | /tasks/:id | Eliminar una tarea | 204 |
-
-### Ejemplo de petición POST
-
-```json
-POST /api/v1/tasks
-Content-Type: application/json
-
-{
-  "titulo": "Comprar pan",
-  "prioridad": 1
-}
-```
-
-### Ejemplo de respuesta
-
-```json
-{
-  "id": 1,
-  "titulo": "Comprar pan",
-  "completada": false,
-  "prioridad": 1
-}
-```
-
-### Errores
-
-| Código | Motivo |
-|--------|--------|
-| 400 | Datos inválidos (título muy corto o prioridad incorrecta) |
-| 404 | Tarea no encontrada |
-| 500 | Error interno del servidor |
-
----
-
-## Middlewares
-
-El servidor usa los siguientes middlewares en orden:
-
-- `cors()` — Permite peticiones desde el frontend en otro origen
-- `express.json()` — Parsea el cuerpo de las peticiones como JSON
-- Logger personalizado — Registra método, URL, código de estado y tiempo de respuesta
-- Manejador global de errores — Captura errores no controlados y devuelve respuestas semánticas
-
----
-
-## Instalación y uso
-
-### Frontend
-```bash
-git clone https://github.com/AlejandroQuintanilla/taskflow-project.git
-cd taskflow-project
-# Abre index.html con Live Server
-```
-
-### Backend
-```bash
-cd server
-npm install
-# Crea un archivo .env con PORT=3000
-npm run dev
-```
-
-La API estará disponible en `http://localhost:3000/api/v1/tasks`
 
 ---
 
@@ -194,4 +194,4 @@ El frontend está desplegado en **Vercel** con integración continua desde GitHu
 
 ---
 
-*Proyecto desarrollado durante las prácticas en Corner Studio — 2025*
+*Proyecto desarrollado durante las prácticas en Corner Studio — Alejandro Quintanilla — 2026*
