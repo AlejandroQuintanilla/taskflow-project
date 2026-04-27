@@ -5,12 +5,13 @@
 ![TaskFlow](docs/screenshot.png)
 
 🌐 **Demo en vivo:** https://taskflow-project-ten.vercel.app/
+🔌 **API en vivo:** https://taskflow-project-4f6g.vercel.app/api/v1/tasks
 
 ---
 
 ## Descripción
 
-TaskFlow es una aplicación web de gestión de tareas construida con HTML, CSS y JavaScript vanilla en el frontend, y Node.js con Express en el backend. El proyecto evolucionó desde una app con LocalStorage hasta una arquitectura cliente-servidor completa con API REST.
+TaskFlow es una aplicación web de gestión de tareas construida con HTML, CSS y JavaScript vanilla en el frontend, y Node.js con Express en el backend. El proyecto evolucionó desde una app con LocalStorage hasta una arquitectura cliente-servidor completa con API REST desplegada en Vercel.
 
 ---
 
@@ -24,7 +25,7 @@ TaskFlow es una aplicación web de gestión de tareas construida con HTML, CSS y
 - ✅ Borrar todas las completadas
 - ✅ Estadísticas: total, completadas, pendientes y porcentaje
 - ✅ Modo oscuro con detección automática del sistema
-- ✅ API REST con Express
+- ✅ API REST con Express desplegada en Vercel
 - ✅ Estados de carga y error en la interfaz
 - ✅ Diseño responsive para móvil, tablet y escritorio
 
@@ -44,7 +45,7 @@ TaskFlow es una aplicación web de gestión de tareas construida con HTML, CSS y
 | dotenv | Variables de entorno |
 | nodemon | Recarga automática en desarrollo |
 | Git & GitHub | Control de versiones |
-| Vercel | Despliegue en producción |
+| Vercel | Despliegue del frontend y backend |
 
 ---
 
@@ -60,6 +61,7 @@ taskflow-project/
 │       └── client.js       # Capa de comunicación con la API
 ├── server/                 # Backend completo
 │   ├── README.md           # Documentación del backend
+│   ├── vercel.json         # Configuración de despliegue en Vercel
 │   ├── .env                # Variables de entorno (no se sube a GitHub)
 │   ├── package.json
 │   └── src/
@@ -104,7 +106,9 @@ cd taskflow-project
 1. Abre la carpeta `taskflow-project` en VS Code
 2. Instala la extensión **Live Server**
 3. Haz clic en **"Go Live"** abajo a la derecha
-4. Se abrirá automáticamente en `http://127.0.0.1:5500/index.html`
+4. Se abrirá en `http://127.0.0.1:5500/index.html`
+
+> Para usar el backend en local, cambia la URL en `src/api/client.js` a `http://localhost:3000/api/v1/tasks`
 
 ### Backend
 
@@ -124,11 +128,9 @@ npm run dev
 
 El servidor estará disponible en `http://localhost:3000/api/v1/tasks`
 
-> El frontend consume la API en `http://localhost:3000`. Asegúrate de que el servidor está corriendo antes de usar la aplicación.
-
 ---
 
-## Cómo desplegar en Vercel con Express
+## Cómo desplegar en Vercel
 
 ### Frontend
 
@@ -144,19 +146,9 @@ El servidor estará disponible en `http://localhost:3000/api/v1/tasks`
 2. Importa el mismo repositorio
 3. Cambia el **Root Directory** a `server`
 4. Añade la variable de entorno `PORT=3000`
-5. Añade un archivo `server/vercel.json`:
-
-```json
-{
-  "version": 2,
-  "builds": [{ "src": "src/index.js", "use": "@vercel/node" }],
-  "routes": [{ "src": "/(.*)", "dest": "src/index.js" }]
-}
-```
-
-6. Haz clic en **Deploy**
-
-Una vez desplegado, actualiza la URL de la API en `src/api/client.js` con la URL pública de Vercel.
+5. Haz clic en **Deploy**
+6. Copia la URL del backend desplegado
+7. Actualiza `src/api/client.js` con esa URL
 
 ---
 
@@ -164,13 +156,11 @@ Una vez desplegado, actualiza la URL de la API en `src/api/client.js` con la URL
 
 La documentación completa de la API está en [server/README.md](server/README.md).
 
-Base URL local: `http://localhost:3000/api/v1`
-
 | Método | Endpoint | Descripción | Código |
 |--------|----------|-------------|--------|
-| GET | /tasks | Obtener todas las tareas | 200 |
-| POST | /tasks | Crear una nueva tarea | 201 |
-| DELETE | /tasks/:id | Eliminar una tarea | 204 |
+| GET | /api/v1/tasks | Obtener todas las tareas | 200 |
+| POST | /api/v1/tasks | Crear una nueva tarea | 201 |
+| DELETE | /api/v1/tasks/:id | Eliminar una tarea | 204 |
 
 ---
 
@@ -188,9 +178,10 @@ Puntuación Lighthouse: **92/100**
 
 ## Despliegue
 
-El frontend está desplegado en **Vercel** con integración continua desde GitHub.
-
-🌐 https://taskflow-project-ten.vercel.app/
+| Servicio | URL |
+|----------|-----|
+| Frontend | https://taskflow-project-ten.vercel.app/ |
+| Backend API | https://taskflow-project-4f6g.vercel.app/api/v1/tasks |
 
 ---
 
